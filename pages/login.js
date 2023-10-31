@@ -1,15 +1,16 @@
-import React, { useState ,useEffect} from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
-import{createUserWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase-config'
+
 import Router from 'next/router';
+import{ signInWithEmailAndPassword} from 'firebase/auth';
 import Alert from 'react-popup-alert'
 
 const Signup = () => {
-  
-     const [email,setEmail]=useState("");
-     const[pass,setPass]=useState("");
-     const [alert, setAlert] = React.useState({
+    const [email,setEmail]=useState("");
+    const[pass,setPass]=useState("");
+
+    const [alert, setAlert] = React.useState({
         type: 'error',
         text: 'This is a alert message',
         show: false
@@ -29,11 +30,11 @@ const Signup = () => {
           show: true
         })
       }
-    const register=async()=>{
+    const login=async()=>{
         try{
-            const user= await createUserWithEmailAndPassword(auth,email,pass)
+            const user= await signInWithEmailAndPassword(auth,email,pass)
             console.log(user);
-            sessionStorage.setItem('Auth Token', user._tokenResponse.refreshToken)
+             sessionStorage.setItem('Auth Token', user._tokenResponse.refreshToken)
 
             Router.replace('/home')
         }
@@ -44,6 +45,7 @@ const Signup = () => {
   
         
          }
+  
   return (
     <div className="login-form">
      
@@ -58,14 +60,14 @@ const Signup = () => {
         
        </div>
        <div className="button-container">
-        <button className='sub' onClick={register}>Register</button>
+        <button onClick={login} className='sub'>Login</button>
        </div>
        <div className='log'>
-        Already have account  <Link href="/login">login</Link>
+        Don't have Account  <Link href="/">Register</Link>
        </div>
        <Alert
         header={'Message'}
-       
+        btnText={'Close'}
         text={alert.text}
         type={alert.type}
         show={alert.show}
@@ -77,7 +79,6 @@ const Signup = () => {
         textStyles={{}}
         buttonStyles={{}}
       />
-    
    </div>
        
   )
